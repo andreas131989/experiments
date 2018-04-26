@@ -1,0 +1,42 @@
+adop-swarm-1 ansible_ssh_host=ec2-34-244-77-25.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-2 ansible_ssh_host=ec2-52-51-197-97.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-3 ansible_ssh_host=ec2-52-50-51-45.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-4 ansible_ssh_host=ec2-34-252-196-209.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-5 ansible_ssh_host=ec2-34-242-103-152.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-6 ansible_ssh_host=ec2-34-248-91-168.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-7 ansible_ssh_host=ec2-52-50-143-102.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-8 ansible_ssh_host=ec2-34-244-49-209.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-9 ansible_ssh_host=ec2-34-241-82-65.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-10 ansible_ssh_host=ec2-34-244-249-17.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-11 ansible_ssh_host=ec2-54-154-153-101.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+adop-swarm-12 ansible_ssh_host=ec2-52-214-70-200.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key=./lgdoptest
+
+[docker_engine]
+adop-swarm-1
+adop-swarm-2
+adop-swarm-3
+adop-swarm-4
+adop-swarm-5
+adop-swarm-6
+adop-swarm-7
+adop-swarm-8
+adop-swarm-9
+adop-swarm-10
+adop-swarm-11
+adop-swarm-12
+
+[docker_swarm_manager]
+adop-swarm-1 swarm_labels='["leader", "manager", "tool"]'
+adop-swarm-2 swarm_labels='["manager", "tool"]'
+adop-swarm-3 swarm_labels='["manager", "tool"]'
+
+[docker_swarm_worker]
+adop-swarm-4 swarm_labels='["frontend", "worker"]'
+adop-swarm-5 swarm_labels='["frontend", "worker"]'
+adop-swarm-6 swarm_labels='["tool", "worker"]'
+adop-swarm-7 swarm_labels='["tool", "worker"]'
+adop-swarm-8 swarm_labels='["tool", "worker"]'
+adop-swarm-9 swarm_labels='["tool", "worker"]'
+adop-swarm-10 swarm_labels='["tool", "worker"]'
+adop-swarm-11 swarm_labels='["jenkins-slave", "worker"]'
+adop-swarm-12 swarm_labels='["jenkins-slave", "worker"]'
