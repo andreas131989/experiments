@@ -1,15 +1,15 @@
-adop-swarm-1 ansible_ssh_host=ec2-34-244-77-25.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-2 ansible_ssh_host=ec2-52-51-197-97.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-3 ansible_ssh_host=ec2-52-50-51-45.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-4 ansible_ssh_host=ec2-34-252-196-209.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-5 ansible_ssh_host=ec2-34-242-103-152.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-6 ansible_ssh_host=ec2-34-248-91-168.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-7 ansible_ssh_host=ec2-52-50-143-102.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-8 ansible_ssh_host=ec2-34-244-49-209.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-9 ansible_ssh_host=ec2-34-241-82-65.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-10 ansible_ssh_host=ec2-34-244-249-17.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-11 ansible_ssh_host=ec2-54-154-153-101.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
-adop-swarm-12 ansible_ssh_host=ec2-52-214-70-200.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest
+adop-swarm-1 ansible_ssh_host=ec2-34-244-77-25.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-2 ansible_ssh_host=ec2-52-51-197-97.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-3 ansible_ssh_host=ec2-52-50-51-45.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-4 ansible_ssh_host=ec2-34-252-196-209.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-5 ansible_ssh_host=ec2-34-242-103-152.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-6 ansible_ssh_host=ec2-34-248-91-168.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-7 ansible_ssh_host=ec2-52-50-143-102.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-8 ansible_ssh_host=ec2-34-244-49-209.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-9 ansible_ssh_host=ec2-34-241-82-65.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-10 ansible_ssh_host=ec2-34-244-249-17.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-11 ansible_ssh_host=ec2-54-154-153-101.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
+adop-swarm-12 ansible_ssh_host=ec2-52-214-70-200.eu-west-1.compute.amazonaws.com ansible_ssh_user=ec2-user ansible_ssh_private_key_file=./lgdoptest.pem
 
 [docker_engine]
 adop-swarm-1
