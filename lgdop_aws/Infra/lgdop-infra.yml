@@ -1,0 +1,414 @@
+# http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-west-2.html#w1ab2c21c45c15c15
+# Amazon EC2 instance in a security group Creates an Amazon EC2 instance in an Amazon EC2 security group.
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Template to create 12 VMs for LGDOP deployment with static private IPs and RHEL OS'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.xlarge
+    AllowedValues:
+    - t2.large
+    - t2.xlarge
+    - t2.2xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+Mappings:
+  AWSInstanceType2Arch:
+    t2.large:
+      Arch: HVM64
+    t2.xlarge:
+      Arch: HVM64
+    t2.2xlarge:
+      Arch: HVM64
+  AWSInstanceType2NATArch:
+    t2.large:
+      Arch: NATHVM64
+    t2.xlarge:
+      Arch: NATHVM64
+    t2.2xlarge:
+      Arch: NATHVM64
+  AWSRegionArch2AMI:
+    eu-west-1:
+      HVM64: ami-7c491f05
+Resources:
+  lglpdop00001:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name
+          Value: lg-l-p-dop00001
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface1
+        DeviceIndex: '0'
+  NetworkInterface1:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.10
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+  lglpdop00002:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00002
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface2
+        DeviceIndex: '0'
+  NetworkInterface2:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.11
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00003:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00003
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface3
+        DeviceIndex: '0'
+  NetworkInterface3:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.12
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00004:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00004
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface4
+        DeviceIndex: '0'
+  NetworkInterface4:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.13
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00005:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00005
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface5
+        DeviceIndex: '0'
+  NetworkInterface5:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.14
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d   
+
+  lglpdop00006:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00006
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface6
+        DeviceIndex: '0'
+  NetworkInterface6:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.15
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00007:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00007
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface7
+        DeviceIndex: '0'
+  NetworkInterface7:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.16
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00008:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00008
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface8
+        DeviceIndex: '0'
+  NetworkInterface8:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.17
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00009:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00009
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface9
+        DeviceIndex: '0'
+  NetworkInterface9:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.18
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00010:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00010
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface10
+        DeviceIndex: '0'
+  NetworkInterface10:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.19
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00011:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00011
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface11
+        DeviceIndex: '0'
+  NetworkInterface11:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.20
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+
+  lglpdop00012:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+        - Key: Name 
+          Value: lg-l-p-dop00012
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - NetworkInterfaceId:
+          Ref: NetworkInterface12
+        DeviceIndex: '0'
+  NetworkInterface12:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: Private IPs 
+      PrivateIpAddress: 172.31.48.21
+      SubnetId: subnet-0ebf22ff6c78bec9d
+      GroupSet:
+          - sg-067d3df505ffc070d
+                                                       
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value:
+      Ref: lglpdop00012
