@@ -1,0 +1,91 @@
+---
+- hosts: all 
+  become: true
+    
+  vars:
+  #  platform_version: "1.3.3"
+  #  docker_local_users: true
+  #  docker_ldap_users: true
+  #  docker_local_users_list: ['adop', 'docker']
+  #  docker_ldap_users_list: ['ishakitko', 'okoggu', 'mkaminski01', 'akrivas', 'stanniru', 'hsareddy', 'predabothu', 'rgella', 'snandigam', 'syerabolu']
+  #  docker_storage_dir: /u01/appl/docker
+  #  adop_ldap_domain: liberty.adop.local
+  #  restheart_ldap_email_domains: "{{ adop_ldap_domain }},accenture.com,libertyglobal.com"
+    public_domain: devops.upc.biz
+  #  internal_platform_ip_or_lb: "{{ public_domain }}"
+    frontent_1_private_ip: 172.31.48.13 
+  #  logstash_host: "{{ internal_platform_ip_or_lb }}"
+
+  #  nfs_host: 192.168.85.103
+  #  nfs_folder: "/devops_permanent_prod_share"
+  #  nfs_mount_folder: /u01/appl/storage2
+
+  #  proxy_host: 172.23.29.155
+  #  proxy_port: 3128
+  #  proxy_url: "http://{{ proxy_host }}:{{ proxy_port }}"
+  #  # proxy config below
+  #  swarm_network_node_ips: [
+  #    '172.23.32.239', '172.23.32.154', '172.23.32.182', '172.23.32.159', '172.23.32.167',
+  #    '172.23.32.210', '172.23.32.208', '172.23.32.165', '172.23.32.205', '172.23.32.252', '172.23.32.158', '172.23.32.227', '172.16.85.45',
+  #    '110.10.0.*','110.7.0.*','110.8.0.*', '110.0.0.*', '110.9.0.*', '172.*.*.*', '10.*.*.*'
+  #  ]
+  #  # swarm_network_node_ips: "{{ hostvars|fetchlistfromdict(groups.servers)|map(attribute='ansible_default_ipv4.address')|list }}"
+  #  swarm_network_non_proxy_ips: ['172.23.37.11','172.23.37.12','172.23.27.38','172.23.27.43', '127.0.0.1', 'localhost','{{ public_domain }}']
+  #  swarm_network_service_ips: ["registry-{{ public_domain }}", "selenium-{{ public_domain }}", 'elasticsearch', 'logstash', 'kibana',
+  #  'proxy', 'ldap', 'gerrit-mysql', 'gerrit', 'sensu-uchiwa', 'sensu-api', 'sensu-server', 'sensu-client-services',
+  #  'sensu-client-system', 'sensu-rabbitmq', 'sensu-redis', 'sonar-mysql', 'sonar', 'jenkins', 'jenkins-slave-shared-1',
+  #  'jenkins-slave-shared-1', 'jenkins-slave-shared-2', 'jenkins-slave-shared-3', 'selenium-hub',
+  #  'selenium-node-chrome', 'selenium-node-firefox', 'ldap-ltb', 'gitlab', 'restheart', 'mongodb',
+  #  'ldap-phpadmin', 'registry', 'nexus', 'jenkins-slave-bss-clarify', 'jenkins-slave-bss-kenan']
+  #  liberty_global_internal_domains: ['.cioio.net', '.liberty.biz', '.upc.biz', '.virginmedia.com', '.lgi.io']
+  #  # proxy config end
+  #  no_proxy_array: "{{ swarm_network_node_ips + swarm_network_non_proxy_ips + swarm_network_service_ips + liberty_global_internal_domains }}"
+  #  no_proxy_hosts: "{{ no_proxy_array | join(',') }}"
+  #  no_proxy_hosts_pattern: "{{ no_proxy_array | join('\\|') }}"
+  #  no_proxy_hosts_join_pipe: "{{ no_proxy_array | join('|') }}"
+  #  adop_repo_url: https://github.com/svscorp/adop-docker-compose.git
+  #  adop_repo_revision: HEAD
+  #  adop_protocol: https
+  #  adop_nginx_port: 443
+  #  adop_nginx_ssl: "on"
+  #  adop_redirect_protocol: https
+  #  docker_swarm_interface: "{{ ansible_default_ipv4['alias'] }}"
+  #  platform_name: lgadop
+  #  nginx_ssl_volume: "{{ platform_name }}_nginx_ssl"
+  #  registry_ssl_volume: "{{ platform_name }}_registry_certs"
+  #  jenkins_volume: "{{ platform_name }}_jenkins_home"
+  #  ldap_internal_user: orchadop
+  #  restheart_config_volume: "{{ platform_name }}_restheart_config"
+  #  # docker_yum_repo: "{{ docker_repo_url }}"
+  #  # docker_yum_gpgkey: "{{ docker_repo_gpg }}"
+
+  #environment:
+  #  TARGET_HOST: "{{ public_domain }}" # "{{ ansible_eno16780032.ipv4.address }}" # "{{ public_domain }}"
+  #  # TARGET_HOST: 172.23.32.210
+  #  CUSTOM_NETWORK_NAME: lgadop
+  #  LDAP_INTERNAL_USER: "{{ ldap_internal_user }}"
+  #  PROXY_IP: "{{ public_domain }}" # "{{ ansible_eno16780032.ipv4.address }}" # "{{ public_domain }}"
+  #  LOGSTASH_HOST: "{{ internal_platform_ip_or_lb }}" # "{{ ansible_eno16780032.ipv4.address }}" # "{{ public_domain }}"
+  #  HTTP_PROXY_HOST: "{{ proxy_host }}"
+  #  HTTP_PROXY_PORT: "{{ proxy_port }}"
+  #  HTTPS_PROXY_HOST: "{{ proxy_host }}"
+  #  HTTPS_PROXY_PORT: "{{ proxy_host }}"
+  #  HTTP_NON_PROXY_HOSTS: "{{ no_proxy_hosts_pattern }}"
+  #  HTTP_NON_PROXY_HOSTS_JOIN_PIPE: "{{ no_proxy_hosts_join_pipe }}"
+  #  http_proxy: "{{ proxy_url }}"
+  #  https_proxy: "{{ proxy_url }}"
+  #  no_proxy: "{{ no_proxy_hosts }}"
+  #  NFS_HOST: "{{ nfs_host }}"
+  #  NFS_FOLDER: "{{ nfs_folder }}"
+  #  PLATFORM_NAME: "{{ platform_name }}"
+  #  INTERNAL_TARGET_HOST: "{{ internal_platform_ip_or_lb }}"
+  #  HTTP_PROXY: "{{ proxy_url }}"
+  #  HTTPS_PROXY: "{{ proxy_url }}"
+  #  NO_PROXY: "{{ no_proxy_hosts }}"
+  #  FRONTEND_1_PRIVATE_IP: "{{ frontent_1_private_ip }}"
+
+  roles:
+    # - { role: adop-destroy-swarm-role }
+    # - { role: ansible-dockerswarm } # had to download it to the playbook, because otherwise Swarm Labels were not applied correctly
+    - { role: install-docker }
+    - { role: adop-swarm-role }

@@ -1,0 +1,73 @@
+## RESTHeart simple security configuration file.
+---
+## Configuration for file based Identity Manager
+# users:
+#     - userid: user1
+#       password: changeit
+#       roles: [users]
+      
+#     - userid: user2
+#       password: changeit
+#       roles: [users]
+      
+#     - userid: admin
+#       password: changeit
+#       roles: [users, admins]
+
+## Configuration for db based Identity Manager
+## bcrypt-hashed-password: true to authenticate against bcrypt hashed passwords
+## https://github.com/svenkubiak/jBCrypt
+# dbim:
+#     - db: userbase
+#       coll: accounts
+#       bcrypt-hashed-password: false
+#       cache-enabled: false
+#       cache-size: 1000
+#       cache-ttl: 60000
+#       cache-expire-policy: AFTER_WRITE
+
+## Config for AD Identity Manager
+adim:
+   - domainControllers: {{ adop_ldap_protocol }}://{{ adop_ldap_server }}
+     principalNameSuffixes: {{ restheart_ldap_email_domains }}
+
+## Configuration for file based Access Manager
+
+## Look at undertow documentation for information about predictates syntax
+## http://undertow.io/undertow-docs/undertow-docs-1.3.0/index.html#predicates-attributes-and-handlers
+## The special role $unauthenticated allows to give permissions without requiring authentication
+permissions:
+# Users with role 'admins' can do anything
+
+# @TODO: Test is it possible to do one row? - role: [ administrators, mongodb-api-administrators, ...]
+    
+    # GLOBAL PERMISSIONS
+
+    - role: administrators
+      predicate: path-prefix[path="/"]
+
+    - role: mongodb-api-administrators
+      predicate: path-prefix[path="/"]
+
+    - role: mongodb-api-viewers
+      predicate: path-prefix[path="/"] and method[value="GET"]
+
+    # Not authenticated user can only GET any resource under the /info URI (also, Sensu checks)
+    - role: $unauthenticated
+      # predicate: path-prefix[path="/info/"] and method[value="GET"]
+      predicate: path-prefix[path="/"]
+
+
+   # PLATFORM LDAP STRUCTURE
+
+    - role: LibertyGlobal.OSS.ASAP.admin
+      predicate: path-prefix[path="/libertyglobal-oss-asap/"] and (method[value="GET"] or method[value="POST"] or method[value="PUT"] or method[value="PATCH"])
+
+    - role: LibertyGlobal.OSS.ASAP.developer
+      predicate: path-prefix[path="/libertyglobal-oss-asap/"] and (method[value="GET"] or method[value="POST"] or method[value="PUT"])
+    
+    - role: LibertyGlobal.OSS.ASAP.viewer
+      predicate: path-prefix[path="/libertyglobal-oss-asap/"] and method[value="GET"]    
+
+    # - role: mongodb-api-developers
+    #   predicate: path-template[value="/info/{username}/{doc}"] and equals[%u, "${username}"]

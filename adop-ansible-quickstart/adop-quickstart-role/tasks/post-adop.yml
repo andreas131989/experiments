@@ -1,0 +1,94 @@
+- name: Get nginx releasenote volume location
+  command: "docker volume inspect --format {% raw %}'{{ .Mountpoint }}'{% endraw %} nginx_releasenote"
+  register: nginx_releasenote_volume_path
+  tags:
+    - replace-files-and-init
+
+- name: Get nginx config volume location
+  command: "docker volume inspect --format {% raw %}'{{ .Mountpoint }}'{% endraw %} nginx_config"
+  register: nginx_config_volume_path
+  tags:
+  - replace-files-and-init
+
+- name: Get sensu_server_check volume location
+  command: "docker volume inspect --format {% raw %}'{{ .Mountpoint }}'{% endraw %} sensu_server_check"
+  register: sensu_server_check_volume_path
+  tags:
+  - replace-files-and-init
+
+- name: Copy LGI NGINX release notes
+  copy:
+    src: "lgi/nginx_releasenote/"
+    dest: "{{ nginx_releasenote_volume_path.stdout }}/"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Place platform version and build number in index.html
+  replace:
+    path: "{{ nginx_releasenote_volume_path.stdout }}/index.html"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - { regexp: "###PLATFORM_VERSION###", replace: "{{ platform_version }}" }
+    - { regexp: "###BUILD###", replace: "{{ ansible_date_time.date }} {{ ansible_date_time.hour }}:{{ ansible_date_time.minute }}" }
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Copy Sensu (new) checks
+  copy:
+    src: "lgi/sensu_server_check/"
+    dest: "{{ sensu_server_check_volume_path.stdout }}/"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Remove Sensu (deprecated) checks
+  file:
+    path: "{{ sensu_server_check_volume_path.stdout }}/{{ item }}.json"
+    state: absent
+  tags:
+    - replace-files-and-init
+  with_items:
+    - "check_HTTP_proxy"
+    - "check_basic_ssh"
+  ignore_errors: true
+
+- name: (hack) Copy registry config into sites-enabled
+  copy:
+    src: "lgi/nginx_registry/registry.conf"
+    dest: "{{ nginx_config_volume_path.stdout }}/sites-enabled/registry.conf"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Copy LGI NGINX extra entries in the config
+  copy:
+    src: "lgi/nginx_extra_tools/"
+    dest: "{{ nginx_config_volume_path.stdout }}/sites-enabled/service-extension/"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Restart NGINX service (downscale)
+  shell: "docker restart $(docker ps --filter='name=proxy' -q)"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Restart Restheart service (downscale)
+  shell: "docker restart $(docker ps --filter='name=restheart' -q)"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Restarting services (sensu, restheart)
+  shell: "docker restart $(docker ps --filter='name={{ item }}' -q)"
+  ignore_errors: true
+  with_items:
+    - 'sensu-server'
+    - 'sensu-api'
+    - 'restheart'
+  tags:
+    - replace-files-and-init

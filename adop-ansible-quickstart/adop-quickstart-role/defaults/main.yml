@@ -1,0 +1,49 @@
+# Domain on which ADOP will be running
+public_domain: 'localhost'
+platform_version: '1.0.0-SANDBOX'
+
+proxy_url: ''
+no_proxy_hosts: "127.0.0.1,localhost" # override in vars to add extra hosts
+
+docker_repo_url: https://download.docker.com/linux/centos/7/$basearch/stable
+docker_repo_gpg: https://download.docker.com/linux/centos/gpg
+docker_rhel_extras_repo: rhel-7-server-extras-rpms
+docker_compose: /usr/bin/docker-compose
+docker_compose_version: 1.16.1
+docker_local_users: false
+docker_ldap_users: false
+# Define next two variables in vars of the play if docker_local_users or docker_ldap_users is true, respectively
+docker_local_users_list: [] #['ansible', 'docker']
+docker_ldap_users_list: [] #['tom.hanks', 'hank.moody']
+docker_systemd_dir: /etc/systemd/system/docker.service.d
+docker_config_dir: /etc/docker
+docker_storage_dir: /var/lib/docker # default
+docker_storage_driver: devicemapper
+
+pip_download_dest: /tmp
+pip_url: https://bootstrap.pypa.io/get-pip.py
+pip_version: ''
+pip_proxy: "{{ proxy_url }}"
+# Next two lines are necessary because values can be pip2, pip2.7, python2 and so on
+python: python
+pip: pip
+
+adop_ldap_protocol: ldap
+adop_ldap_host: ldap
+adop_ldap_port: 389
+adop_ldap_server: "{{ adop_ldap_host }}:{{ adop_ldap_port }}"
+adop_ldap_domain: company.org.com
+adop_ldap_domain_list: "{% for item in adop_ldap_domain.split('.') %}dc={{item}} {% endfor %}" # don't change this
+adop_ldap_full_domain: "{{ adop_ldap_domain_list.split() | join(',')}}"
+adop_repo_url: https://github.com/Accenture/adop-docker-compose.git
+adop_repo_revision: HEAD
+adop_protocol: http
+adop_nginx_port: 80
+adop_nginx_ssl: "off"
+adop_redirect_protocol: http
+restheart_ldap_email_domains: "{{ adop_ldap_domain }}"
+logstash_host: "{{ public_domain }}"
+nginx_ssl_volume: nginx_ssl
+registry_ssl_volume: registry_certs
+jenkins_volume: jenkins_home
+restheart_config_volume: restheart_config

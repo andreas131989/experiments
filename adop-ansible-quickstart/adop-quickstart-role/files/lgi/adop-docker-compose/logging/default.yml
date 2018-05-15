@@ -1,0 +1,229 @@
+# set LOGSTASH_HOST to dns/ip of logstash host
+
+proxy:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: proxy
+    labels: proxy,tool
+
+ldap:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: ldap
+    labels: ldap,tool
+
+gerrit-mysql:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: gerrit-mysql
+    labels: gerrit-mysql,tool
+
+gerrit:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: gerrit
+    labels: gerrit,tool
+
+sensu-uchiwa:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sensu-uchiwa
+    labels: sensu-uchiwa,tool
+
+sensu-api:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sensu-api
+    labels: sensu-api,tool
+
+sensu-server:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sensu-server
+    labels: sensu-server,tool
+
+sensu-client:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sensu-client
+    labels: sensu-client,tool
+
+sensu-rabbitmq:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sensu-rabbitmq
+    labels: sensu-rabbitmq,tool
+
+sensu-redis:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sensu-redis
+    labels: sensu-redis,tool
+
+sonar-mysql:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sonar-mysql
+    labels: sonar-mysql,tool
+
+sonar:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: sonar
+    labels: sonar,tool
+
+jenkins:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins
+    labels: jenkins,tool
+
+selenium-hub:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: selenium-hub
+    labels: selenium-hub,tool,qa
+
+selenium-node-chrome:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: selenium-node-chrome
+    labels: selenium-node-chrome,tool,qa
+
+selenium-node-firefox:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: selenium-node-firefox
+    labels: selenium-node-firefox,tool,qa
+
+nexus:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: nexus
+    labels: nexus,tool
+
+registry:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: registry
+    labels: registry,tool
+
+### EXTRA TOOLS ###
+
+gitlab:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: gitlab
+    labels: gitlab,tool
+
+mongodb:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: mongodb
+    labels: mongodb,tool,database
+
+restheart:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: restheart
+    labels: restheart,tool,api
+
+### JENKINS SLAVES ###
+
+jenkins-slave-shared-1:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-shared-1
+    labels: jenkins-slave,shared
+
+jenkins-slave-shared-2:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-shared-2
+    labels: jenkins-slave,shared
+
+jenkins-slave-shared-3:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-shared-3
+    labels: jenkins-slave,shared
+
+jenkins-slave-bss-clarify:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-bss-clarify
+    labels: jenkins-slave,bss,clarify
+
+jenkins-slave-bss-kenan:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-bss-kenan
+    labels: jenkins-slave,bss,kenan
+
+jenkins-slave-oss-asap:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-oss-asap
+    labels: jenkins-slave,oss,asap
+
+jenkins-slave-oss-cdm:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-oss-cdm
+    labels: jenkins-slave,oss,cdm
+
+jenkins-slave-online-aem:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-online-aem
+    labels: jenkins-slave,online,aem
+
+jenkins-slave-mdw-core-off-1:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-mdw-core-off-1
+    labels: jenkins-slave,mdw,core-off-1
+
+jenkins-slave-mdw-core-off-2:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-mdw-core-off-2
+    labels: jenkins-slave,bss,mdw,core-off-2
+
+jenkins-slave-obo:
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://${LOGSTASH_HOST}:12201"
+    tag: jenkins-slave-obo
+    labels: jenkins-slave,obo

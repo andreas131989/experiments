@@ -1,0 +1,105 @@
+- name: Get list of labels
+  command: >-
+         docker inspect
+         --format {% raw %}'{{range $key, $value := .Spec.Labels}}{{printf "%s\n" $key}}{{end}}'{% endraw %}
+         {{ ansible_hostname }}
+  register: docker_swarm_labels
+  changed_when: False
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}"
+  delegate_facts: True
+  tags:
+    - skip_ansible_lint
+    - swarm_labels
+
+- name: Copy LGI NGINX release notes
+  copy:
+    src: "lgi/nginx_releasenote/"
+    dest: "{{ nfs_mount_folder }}/{{ platform_name }}_nginx_releasenote/"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Place platform version and build number in index.html
+  replace:
+    path: "{{ nfs_mount_folder }}/{{ platform_name }}_nginx_releasenote/index.html"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  with_items:
+    - { regexp: "###PLATFORM_VERSION###", replace: "{{ platform_version }}" }
+    - { regexp: "###BUILD###", replace: "{{ ansible_date_time.date }} {{ ansible_date_time.hour }}:{{ ansible_date_time.minute }}" }
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Copy Sensu (new) checks
+  copy:
+    src: "lgi/sensu_server_check/"
+    dest: "{{ nfs_mount_folder }}/{{ platform_name }}_sensu_server_check/"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Remove Sensu (deprecated) checks
+  file:
+    path: "{{ nfs_mount_folder }}/{{ platform_name }}_sensu_server_check/{{ item }}.json"
+    state: absent
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  with_items:
+    - "check_HTTP_proxy"
+    - "check_basic_ssh"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: (hack) Copy registry config into sites-enabled
+  copy:
+    src: "lgi/nginx_registry/registry.conf"
+    dest: "{{ nfs_mount_folder }}/{{ platform_name }}_nginx_config/sites-enabled/registry.conf"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+    - update-platform
+
+- name: Copy LGI NGINX main stack entry in the config
+  copy:
+    src: "lgi/nginx_conf/sites-enabled/tools-context.conf"
+    dest: "{{ nfs_mount_folder }}/{{ platform_name }}_nginx_config/sites-enabled/tools-context.conf"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Overriding main NGINX config
+  copy:
+    src: "lgi/nginx_conf/nginx.conf"
+    dest: "{{ nfs_mount_folder }}/{{ platform_name }}_nginx_config/nginx.conf"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+- name: Copy LGI NGINX gitlab entry in the config
+  copy:
+    src: "lgi/nginx_extra_tools/"
+    dest: "{{ nfs_mount_folder }}/{{ platform_name }}_nginx_config/sites-enabled/service-extension/"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  tags:
+    - replace-files-and-init
+
+
+- name: Restarting other services
+  shell: "docker service update {{ platform_name }}_{{ item }} --force"
+  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  ignore_errors: true
+  with_items:
+    - 'sensu-server'
+    - 'sensu-api'
+    - 'proxy'
+    - 'restheart'
+  tags:
+    - replace-files-and-init

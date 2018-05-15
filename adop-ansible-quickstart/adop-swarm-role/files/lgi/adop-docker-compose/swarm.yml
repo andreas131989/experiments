@@ -1,0 +1,274 @@
+volumes:
+  elasticsearch_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_elasticsearch_data"
+  nginx_config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_nginx_config"
+  nginx_releasenote:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_nginx_releasenote"
+  nginx_ssl:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_nginx_ssl"
+  gerrit_mysql_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_gerrit_mysql_data"
+  git_repos:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_git_repos"
+  gerrit_review_site:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_gerrit_review_site"
+  sensu_api_conf:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sensu_api_conf"
+  sensu_server_conf:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sensu_server_conf"
+  sensu_server_check:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sensu_server_check"
+  sensu_client_conf:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sensu_client_conf"
+  sensu_rabbitmq_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sensu_rabbitmq_data"
+  sensu_redis_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sensu_redis_data"
+  sonar_mysql_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sonar_mysql_data"
+  sonar_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sonar_data"
+  sonar_extensions:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sonar_extensions"
+  sonar_logs:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sonar_logs"
+  sonar_conf:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_sonar_conf"
+  jenkins_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_home"
+  nexus_sonatype_work:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_nexus_sonatype_work"
+  registry_certs:
+    external:
+      name: "${REGISTRY_CERT_VOL}"
+  registry_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_registry_data"
+
+## EXTRA TOOLS
+  gitlab_config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_gitlab_config"
+  gitlab_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_gitlab_data"
+  restheart_config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},r"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_restheart_config"
+  mongodb_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_mongodb_data"
+
+## SHARED JENKINS SLAVES
+  jenkins_slave_shared_1_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_shared_1_home"
+  jenkins_slave_shared_2_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_shared_2_home"
+  jenkins_slave_shared_3_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_shared_3_home"
+
+## TEAM JENKINS SLAVES
+  jenkins_slave_bss_clarify_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_bss_clarify_home"
+  jenkins_slave_bss_kenan_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_bss_kenan_home"
+  jenkins_slave_oss_asap_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_oss_asap_home"
+  jenkins_slave_oss_cdm_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_oss_cdm_home"
+  jenkins_slave_online_aem_1_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_online_aem_1_home"
+  jenkins_slave_online_aem_2_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_online_aem_2_home"
+  jenkins_slave_mdw_core_off_1_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_mdw_core_off_1_home"
+  jenkins_slave_mdw_core_off_2_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_mdw_core_off_2_home"
+  jenkins_slave_obo_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_obo_home"
+  jenkins_slave_security_uxp_1_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_security_uxp_1_home"
+  jenkins_slave_online_aem_b2b_1_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_online_aem_b2b_1_home"
+  jenkins_slave_mdw_peal_1_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_mdw_peal_1_home"
+  jenkins_slave_mdw_peal_2_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_mdw_peal_2_home"
+  jenkins_slave_mdw_core_off_libs:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_mdw_core_off_libs"
+  jenkins_slave_mdw_off_projects_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_mdw_off_projects_home"
+  jenkins_slave_online_testautomation_home:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_HOST},rw"
+      device: ":${NFS_FOLDER}/${PLATFORM_NAME}_jenkins_slave_online_testautomation_home"

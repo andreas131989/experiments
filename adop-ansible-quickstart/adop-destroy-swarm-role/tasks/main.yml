@@ -1,0 +1,4 @@
+- name: Destroy platform
+  include: destroy.yml
+  tags:
+    - destroy

@@ -1,0 +1,137 @@
+#-------------------------------------BASIC PREREQUISITES----------------------------------
+- name: Install basic packages
+  debugger: on_failed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - nfs-utils
+    #- htop
+    - lvm2
+    - git
+
+- name: Enable the Docker daemon as a service and start it.
+  service:
+    name: docker
+    state: restarted
+
+- name: Add IP address of the first front-end node to /etc/hosts (delete the entry once DNS is in place)
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ frontent_1_private_ip }} {{ public_domain }} registry-{{ public_domain }} selenium-{{ public_domain }} logstash-{{ public_domain }}"
+
+# Disable docker daemon warnings, not sure if it actually has any impact
+- name: Set bridge-nf-call-iptables on in /proc and in the sysctl file and reload if necessary
+  sysctl:
+    name: "{{ item }}"
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_items:
+    - net.bridge.bridge-nf-call-iptables
+    - net.bridge.bridge-nf-call-ip6tables
+
+- name: Add local users to docker group for non-root access
+  user:
+    name: "{{ item }}"
+    group: docker
+    append: yes # to add users to the group instead of setting this group only for users
+  with_items: "{{ docker_local_users_list }}"
+  when: docker_local_users
+
+- name: Add LDAP users to docker group
+  command: "gpasswd -a {{ item }} docker"
+  with_items: "{{ docker_ldap_users_list }}"
+  when: docker_ldap_users
+
+- name: Configure Docker daemon options
+  template:
+    src: daemon.json.j2
+    dest: "{{ docker_config_dir }}/daemon.json"
+  tags:
+    - docker-replace-only
+  register: docker_config
+
+- name: Create a systemd drop-in directory for the docker service
+  tags:
+    - docker-replace-only
+  file:
+    path: "{{ docker_systemd_dir }}"
+    mode: 0755
+    state: directory
+
+- name: Configure Docker proxy
+  template:
+    src: http-proxy.conf.j2
+    dest: "{{ docker_systemd_dir }}/http-proxy.conf"
+  tags:
+    - docker-replace-only
+  register: docker_proxy
+
+# @TODO: Add better condition to respect NFS and non-NFS case
+- name: Overriding NFS Unit in Docker
+  template:
+    src: override.conf.j2
+    dest: "{{ docker_systemd_dir }}/override.conf"
+  tags:
+    - docker-replace-only
+  register: docker_nfs_override
+
+
+# @TODO: Add better condition to respect NFS and non-NFS case
+- name: Flush systemd changes
+  command: systemctl daemon-reload
+  tags:
+    - docker-replace-only
+  # when: docker_proxy.changed # or docker_nfs_override.changed
+
+- name: Restart Docker
+  service:
+    name: docker
+    state: restarted
+  tags:
+    - docker-replace-only
+  when: docker_proxy.changed or docker_config.changed
+
+#----------------------------------------COMPOSE INSTALLATION---------------------------------------------
+- name: Get kernel name
+  command: uname -s
+  register: unames
+  when: "'docker_swarm_manager' in group_names"
+
+- name: Get machine hardware name
+  command: uname -m
+  register: unamem
+  when: "'docker_swarm_manager' in group_names"
+
+- name: Downloading docker-compose binary
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ unames.stdout }}-{{ unamem.stdout }}"
+    dest: "{{ docker_compose }}"
+  when: "'docker_swarm_manager' in group_names"
+
+- name: Making docker-compose binary executable
+  file:
+    path: "{{ docker_compose }}"
+    mode: 0755
+  when: "'docker_swarm_manager' in group_names"
+
+#----------------------------------------CLEANUP---------------------------------------------
+
+- name: clean journalctl
+  command: journalctl --vacuum-time=1d
+  ignore_errors: yes
+  tags:
+    - replace-files-and-init
+
+- name: clean messages
+  command: rm -rf /var/log/messages-*
+  ignore_errors: yes
+  tags:
+    - replace-files-and-init

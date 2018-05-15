@@ -1,0 +1,141 @@
+#-------------------------------------DOCKER INSTALLATION----------------------------------
+- name: Install basic packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - nfs-utils
+    - htop
+    - lvm2
+    - git
+
+# - name: Add Docker CE repository for RHEL yum
+#   yum_repository:
+#     name: docker-ce
+#     description: Docker CE RHEL Repository
+#     baseurl: "{{ docker_repo_url }}"
+#     gpgcheck: yes
+#     gpgkey: "{{ docker_repo_gpg }}"
+#     enabled: yes
+
+# - name: Update the yum package index
+#   command: yum makecache fast
+
+- name: Downloading docker
+  get_url:
+    # url: https://download.docker.com/linux/centos/7/x86_64/edge/Packages/docker-ce-17.07.0.ce-1.el7.centos.x86_64.rpm
+    url: https://download.docker.com/linux/centos/7/x86_64/edge/Packages/docker-ce-17.11.0.ce-1.el7.centos.x86_64.rpm
+    dest: /tmp/docker-ce.rpm
+  register: docker_binary
+  tags:
+    - docker-update
+    
+- name: Install the Docker Engine from file.
+  yum:
+    name: /tmp/docker-ce.rpm
+    state: present
+  tags:
+    - docker-update
+
+- name: Enable the Docker daemon as a service and start it.
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Add IP address of the first front-end node to /etc/hosts (delete the entry once DNS is in place)
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ frontent_1_private_ip }} {{ public_domain }} registry-{{ public_domain }} selenium-{{ public_domain }} logstash-{{ public_domain }}"
+
+- name: Add local users to docker group for non-root access
+  user:
+    name: "{{ item }}"
+    group: docker
+    append: yes # to add users to the group instead of setting this group only for users
+  with_items: "{{ docker_local_users_list }}"
+  when: docker_local_users
+
+- name: Add LDAP users to docker group
+  command: "gpasswd -a {{ item }} docker"
+  with_items: "{{ docker_ldap_users_list }}"
+  when: docker_ldap_users
+
+# Disable docker daemon warnings, not sure if it actually has any impact
+- name: Set bridge-nf-call-iptables on in /proc and in the sysctl file and reload if necessary
+  sysctl:
+    name: "{{ item }}"
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_items:
+    - net.bridge.bridge-nf-call-iptables
+    - net.bridge.bridge-nf-call-ip6tables
+
+# One time fix
+# - name: Allow deletion of containers under devicemapper driver
+#   shell: echo 'y' | dmsetup udevcomplete_all
+#   when: "{{ docker_storage_driver }} == 'devicemapper'"
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1456138#c40
+- name: Fix occasional devicemapper cookie issues by increasing semaphore limits
+  shell: printf '250\t32000\t32\t300' >/proc/sys/kernel/sem
+  when: docker_storage_driver == 'devicemapper'
+
+- name: Configure Docker daemon options
+  template:
+    src: daemon.json.j2
+    dest: "{{ docker_config_dir }}/daemon.json"
+  register: docker_config
+
+- name: Create a systemd drop-in directory for the docker service
+  file:
+    path: "{{ docker_systemd_dir }}"
+    mode: 0755
+    state: directory
+
+- name: Configure Docker proxy
+  template:
+    src: http-proxy.conf.j2
+    dest: "{{ docker_systemd_dir }}/http-proxy.conf"
+  register: docker_proxy
+  tags:
+    - docker-update
+    
+- name: Flush systemd changes
+  command: systemctl daemon-reload
+  when: docker_proxy.changed or docker_binary.changed
+  tags:
+    - docker-update
+
+- name: Restart Docker
+  service:
+    name: docker
+    state: restarted
+  when: docker_proxy.changed or docker_config.changed or docker_binary.changed
+  tags:
+    - docker-update
+#----------------------------------------COMPOSE INSTALLATION---------------------------------------------
+- name: Get kernel name
+  command: uname -s
+  register: unames
+
+- name: Get machine hardware name
+  command: uname -m
+  register: unamem
+
+- name: Downloading docker-compose binary
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ unames.stdout }}-{{ unamem.stdout }}"
+    dest: "{{ docker_compose }}"
+
+- name: Making docker-compose binary executable
+  file: 
+    path: "{{ docker_compose }}"
+    mode: 0755

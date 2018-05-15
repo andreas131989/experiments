@@ -1,0 +1,43 @@
+    - name: Install yum utils
+      yum:
+        name: yum-utils
+        state: present
+
+    - name: Install device-mapper-persistent-data
+      yum:
+        name: device-mapper-persistent-data
+        state: present
+
+    - name: Install lvm2
+      yum:
+        name: lvm2
+        state: present
+
+    - name: Add Docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docer-ce.repo
+      become: yes
+
+    - name: Install Selinux prereq
+      yum:
+        name: ftp://mirror.switch.ch/pool/4/mirror/centos/7.4.1708/extras/x86_64/Packages/container-selinux-2.33-1.git86f33cd.el7.noarch.rpm
+        state: present 
+     
+    - name: Install Pigz prereq
+      yum:
+        name: http://mirror.centos.org/centos/7/extras/x86_64/Packages/pigz-2.3.3-1.el7.centos.x86_64.rpm
+        state: present  
+    
+    - name: Install Docker
+      package:
+        name: docker-ce
+        state: latest
+      become: yes
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      become: yes

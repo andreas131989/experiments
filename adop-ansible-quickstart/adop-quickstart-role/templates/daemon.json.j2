@@ -1,0 +1,9 @@
+{
+    "data-root": "{{ docker_storage_dir }}",
+    "storage-driver": "{{ docker_storage_driver }}",
+    "log-driver": "gelf",
+    "log-opts": {
+        "gelf-address": "udp://{{ logstash_host }}:12201",
+        "labels": "tool,qa,kibana,gerrit,jenkins,elasticsearch,logstash,kibana,proxy,ldap,gerrit-mysql,gerrit,sensu-uchiwa,sensu-api,sensu-server,sensu-client-services,sensu-client-system,sensu-rabbitmq,sensu-redis,sonar-mysql,sonar,jenkins,jenkins-slave,selenium-hub,selenium-node-chrome,selenium-node-firefox,ldap-ltb,gitlab,ldap-phpadmin,registry,nexus,jenkins-slave-bss-clarify,jenkins-slave-bss-kenan,registry,bss,clarify,kenan,jenkins-slave-shared-1,jenkins-slave-shared-2,jenkins-slave-shared-3"
+    }
+}

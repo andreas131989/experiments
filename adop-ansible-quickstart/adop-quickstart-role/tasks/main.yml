@@ -1,0 +1,19 @@
+- name: Install and configure docker
+  include: docker.yml
+  tags:
+    - docker
+
+- name: Install and configure pip
+  include: pip.yml
+  tags:
+    - pip
+
+- name: Install and configure adop
+  include: adop.yml
+  tags:
+    - adop
+
+- name: Post addop LGI tweaks
+  include: post-adop.yml
+  tags:
+    - post-adop
