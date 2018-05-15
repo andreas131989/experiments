@@ -1,7 +1,0 @@
-- name: Reboot servers
-  shell: ( sleep 3 && /sbin/reboot & )
-  async: 0
-  poll: 0
-
-- name: Wait for reboot to complete
-  pause: minutes=1

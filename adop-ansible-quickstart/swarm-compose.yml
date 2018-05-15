@@ -1,8 +1,0 @@
-version: '3'
-services:
-  ansible:
-    build: .
-    image: 'ansible-adop'
-    command: ["bash", "-c", "ansible-galaxy install geerlingguy.repo-epel atosatto.docker-swarm && env && ansible-playbook -c paramiko -i host swarm.yml -vvvv"]
-    volumes:
-      - .:/ansible/
